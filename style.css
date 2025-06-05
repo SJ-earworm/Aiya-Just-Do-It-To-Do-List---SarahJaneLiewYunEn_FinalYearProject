@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Manrope:wght@200..800&family=Quicksand:wght@300..700&display=swap');
+
+
+* {
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    color: #1E1E1E;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 1%;
+    margin-bottom: 1%; */
+    /* border: 1px solid black; */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: whitesmoke;
+    margin-top: 0%;
+    /* margin-bottom: -1%; */
+    border: 1px solid black;
+    min-height: 99vh; /* vh = viewport height. 100vh sets the element to the height of the whole browser window */
+    padding: 5% 0;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    cursor: pointer;
+}
+
+input[type=text]  {
+    background-color: transparent;
+}
+
+textarea {
+    background-color: transparent;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.dimmed-overlay {
+    background-color: rgba(128, 128, 128, 0.21);
+    width: 99vw;
+    height: 99vh;
+    z-index: 1;
+}
+
+.main-main-frame {
+    /* height: 70vh; */
+    height: 80%;
+    margin: 0 9.5%;
+    display: flex;
+    flex-direction: row;
+    /* border: 1px solid black; */
+    justify-content: space-between;
+}
+
+.logo img {
+    height: auto;
+    max-width: 25%;
+    position: relative;
+    margin-top: 2%;
+}
+
+.success-error-status {
+    padding: 10px 15px;
+    border: 3px inset rgba(0,0,0,.5);
+    border-radius: 5px;
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-63%, 0);
+    z-index: 5;
+    visibility: hidden;
+}
+
+.close-btn-x {
+    border: none;
+    background-color: transparent;
+    height: 6%;
+    width: 10%;
+    position: relative;
+    top: -10%;
+    right: -35%;
+}
+
+.close-btn-x i {
+    font-size: 32px;
+    color: rgba(128, 128, 128, 0.926);
+}
+
+.folder-pane {
+    height: 100%;
+    width: 19%;;
+    /* border: 1px solid black; */
+}
+
+.folder-card-ui {
+    height: 38px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    /* border: 1px solid black; */
+}
+
+.card-ui-thumb {
+    background-color: #FA750C;
+    height: 100%;
+    width: 10px;
+    margin: 0;
+}
+
+.card-ui-title {
+    margin: 0;
+    padding: 7.5px 0 0 10px;
+    flex-grow: 1;
+    background: #FA750C;
+    background: linear-gradient(90deg,rgba(250, 117, 12, 0.29) 0%, rgba(250, 117, 12, 0.14) 50%, rgba(250, 117, 12, 0) 100%);
+    font-weight: 600;
+    color: #e96602;
+    /* border: 1px solid black; */
+}
+
+.mylist-header span, .mylist-header i, .mylist-header button {   /* resetting any hidden spacing around the 2 elements */
+    margin: 0;
+    padding: 0;
+}
+
+.mylist-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    /* box-sizing: border-box; */
+    /* border: 1px solid black; */
+}
+
+.add-list-btn {
+    border: none;
+    background-color: whitesmoke;
+}
+
+.main-functioning-container {
+    height: 100%;
+    width: 75%;
+    border: 1px solid black;
+    margin-left: 6%;
+}
+
+.main-functioning-container button {
+    /* border: none; */
+    /* border: 1px solid black;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    width: auto; */
+}
+
+.new-task-btn {
+    /* width: 10%;
+    height: 10%; */
+    height: 58px;
+    width: 58px;    
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    border-radius: 45px;
+    padding: 0;
+    position: absolute;
+    right: 10.5%;
+    bottom: 14%;
+}
+
+.new-task-btn button {
+    height: 58px;
+    width: 58px;
+    border: none;
+    background-color: #FA750C;
+    box-sizing: border-box;
+    padding: 0;
+    border-radius: 45px;
+}
+
+.new-task-btn img {
+    width: 50px;
+    height: 50px;
+    border-radius: 45px;
+    /* max-width: 100%; */
+    /* position: fixed;
+    bottom: 50%; */
+}
+
+.empty-list-text {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 290px;
+    position: absolute;
+    right: 13%;
+    bottom: 7%;
+    visibility: hidden;  /* hidden by default */
+}
+
+.empty-list-text span {
+    font-family: "Caveat", cursive;
+    font-optical-sizing: auto;
+    font-size: 32px;
+    transform: rotate(-15deg);
+}
+
+.empty-list-text img {
+    max-width: 25%;
+    /* transform: rotate(220deg); */
+    rotate: 220deg;
+    transform: translate(-60px, 58px);
+}
+
+.task-list-li {
+    list-style-type: none;
+    padding: 10px;
+    font-size: 18px;
+}
+
+/* CUSTOM CHECKBOX, HALFWAY */
+.task-list-li input {
+    /* position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0; */
+}
+
+/* CONTINUE LATER: CUSTOM CHECKBOX */
+
+.add-task-pane {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;
+    height: 85%;
+    width: 25%;
+    box-shadow: 9px 9px 2px rgba(128, 128, 128, 0.086);
+    border-radius: 9%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid rgba(128, 128, 128, 0.384);
+    visibility: hidden;  /* default display: hidden */
+}
+
+.add-task-pane form {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    height: 60%;
+    width: 70%;
+}
+
+.add-task-pane input[type=text] {
+    height: 45px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid #1E1E1E;
+    font-size: 18px;
+}
+
+.save-btn {
+    border: none;
+    background-color: #FA750C;
+    color: whitesmoke;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 0 30%;
+    padding: 4% 5%;
+}
+
+.save-btn:hover {
+    background-color: #e96d0e;
+}
