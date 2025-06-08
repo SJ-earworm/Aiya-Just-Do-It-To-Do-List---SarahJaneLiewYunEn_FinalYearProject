@@ -25,12 +25,18 @@
                 <?php 
                     // if task list empty, pull up prompt to add new task
                     include('web_components/empty_view_new_task_prompt.php');
-                    // else, populate tasks here
+                    // else, JavaScript handling case where list exists
+
+                    // suggested tasks to complete
+                    include('web_components/highlighted_tasks_section.php');
                 ?>
                 <!-- add task button -->
                 <?php include('web_components/add_task_button.php') ?>
             </div>
         </div>
+
+        <!-- dimmed overlay -->
+        <div class="dimmed-overlay" id="overlay"></div>
 
         <?php include('web_components/add_task_pane.php') ?>
 
@@ -40,9 +46,15 @@
         <!-- JavaScript -->
         <script>
             // Initialising button for adding new tasks
-            const newtaskbtn = document.getElementById('newTaskBtn');
+            const newTaskBtn = document.getElementById('newTaskBtn');
+            // Element where tasks will be populated
+            const taskarea = document.getElementById('taskArea');
             // Initialising add task pane
-            const addtaskpane = document.getElementById('addTaskPane');
+            const addEditTaskPane = document.getElementById('addEditTaskPane');
+            // Initialising close add task pane
+            const closeAddEditTaskPaneBtn = document.getElementById('closeAddEditTaskPaneBtn');
+            // Initialising dimmed overlay
+            const dimmedOverlay = document.getElementById('overlay');
             // Initialising response message pop-up box
             const message = document.getElementById('successErrorStatus');
         </script>

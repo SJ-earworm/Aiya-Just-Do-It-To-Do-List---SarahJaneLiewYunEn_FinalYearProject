@@ -1,5 +1,5 @@
 <div class="new-task-btn" id="newTaskBtn">
-    <button onclick="toggleNewTaskPane()">
+    <button>
         <img src="img/addiconwhite.png" />
     </button>
 </div>

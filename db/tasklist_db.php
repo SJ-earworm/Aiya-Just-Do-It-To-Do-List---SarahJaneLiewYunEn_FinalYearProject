@@ -12,7 +12,8 @@
         // retrieve user_ID here
 
         // SELECT query
-        $query = "SELECT task_ID, task_name FROM Task";
+        // $query = "SELECT task_ID, task_name, prog_status FROM Task";
+        $query = "SELECT task_ID, task_name, prog_status, difficulty, priority FROM Task ORDER BY difficulty ASC, priority ASC";    // difficulty & priority values pulled from db is for testing purposes, pls remove later
         $stmt = $con->prepare($query);
 
         try {
