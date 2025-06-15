@@ -12,6 +12,7 @@
         // retrieving user input
         $input = json_decode(file_get_contents('php://input'), true);   // extracting key-value pairs sent over from formData
                                                                         // the 'true' parameter: controls the type of PHP data structure JSON objects are converted into. 'true' allows us to access the json data using associative arrays e.g. $frontend_data['task_ID']
+        $taskID = $input['taskID'];
         $taskname = $input['taskName'];
         $taskdescription = $input['taskDescription'];
         $date = $input['reminderDate']; // date
@@ -22,15 +23,23 @@
 
         // Inserting into Task table
         try {
-            $query = "INSERT INTO Task (task_name, task_description, reminder_date, reminder_time, priority, difficulty, prog_status)
-                        VALUES (?,?,?,?,?,?,?)";
+            $query = "UPDATE Task
+                        SET 
+                            task_name = ?,
+                            task_description = ?,
+                            reminder_date = ?,
+                            reminder_time = ?,
+                            priority = ?,
+                            difficulty = ?,
+                            prog_status = ?
+                        WHERE task_ID = ?";
             $stmt = $con->prepare($query);
-            $stmt->bind_param("ssssiii", $taskname, $taskdescription, $date, $time, $priority, $difficulty, $progress);
+            $stmt->bind_param("ssssiiii", $taskname, $taskdescription, $date, $time, $priority, $difficulty, $progress, $taskID);
             if (!$stmt->execute()) {
                 // error message
                 $response = [
                     'status' => 'fail',
-                    'message' => 'Error inserting new task'
+                    'message' => 'Error updating task'
                 ];
                 // sending back to frontend & ending the process
                 echo json_encode($response);
@@ -48,7 +57,7 @@
         } catch (mysqli_sql_exception $e) {
             $response = [
                 'status' => 'fail',
-                'message' => 'Error creating new task, please try again later.',
+                'message' => 'Error updating task, please try again later.',
                 'log' => 'ADD TASK DB | Error: ' . $e->getMessage()
             ];
             // sending back to frontend & ending the process

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Quicksand:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Manrope:wght@200..800&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Manrope:wght@200..800&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300..700&display=swap');
 
 
 * {
@@ -30,7 +31,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -92,6 +93,27 @@ textarea {
     max-width: 25%;
     position: relative;
     margin-top: 2%;
+}
+
+.settings-block {
+    position: absolute;
+    right: 8%;
+    top: 18%;
+    margin-left: 0;
+    margin-right: 0;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    width: max-content;
+    border: 1px solid black;
+    display: none;
+}
+
+.settings-block li {
+    list-style: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 8px 35px 8px 0px;
+    text-align: left;
 }
 
 .success-error-status {
@@ -175,23 +197,107 @@ textarea {
     background-color: whitesmoke;
 }
 
-.main-functioning-container {
+.toggle-and-tasks-group {
     height: 100%;
-    width: 75%;
-    border: 1px solid black;
-    margin-left: 6%;
+    width: 80%;
+}
+
+.main-functioning-container {
+    height: 98%;
+    width: 100%; 
+    /* padding-bottom: 50px; */
+    /* border: 1px solid black; */
+    /* margin-left: 6%; */
     overflow-y: auto;
 }
 
-.main-functioning-container button {
-    /* border: none; */
-    /* border: 1px solid black;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    display: inline-flex;
+.main-task-display {
+    width: 100%;
+}
+
+/* show/hide completed tasks */
+.show-hide-completed-setting {
+    margin-left: auto;
+    margin-right: 0;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    width: auto; */
+    position: relative;
+    width: 200px;
+    /* border: 1px solid black; */
+}
+
+.show-hide-completed-switch {       /* the <label> wrapping the hidden checkbox & visible toggle button */
+    position: relative;            /* this is just to group the elements logically, not directly visually in this case */
+    display: inline-block;
+    width: 40px;
+    height: 21px;
+    /* border: 1px solid black; */
+}
+
+.show-hide-completed-switch input {     /* hiding native checkbox */
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {        /* the entire pill shaped slider */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background-color: #ccc;
+    border: 1px solid #1e1e1e11;
+    border-radius: 40px;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch-slider::before {        /* slider knob (circle) */
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    border-radius: 50px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.show-hide-completed-switch input:checked + .switch-slider {
+    background-color: #FA750C;
+}
+
+.show-hide-completed-switch input:focus + .switch-slider {
+    box-shadow: 0 0 1px #FA750C;
+}
+
+.show-hide-completed-switch input:checked + .switch-slider:before {
+    -webkit-transform: translateX(19px);
+    -ms-transform: translateX(19px);
+    transform: translateX(19px);
+}
+
+.completed-task-display {
+    width: 95%;
+    margin-top: 50px;
+    margin-left: 0;
+    display: none;
+    /* border: 1px solid black; */
+}
+
+.completed-task-display-title {
+    font-size: 19px;
+    font-weight: 600;
+    color: #1e1e1e7f;
+    position: relative;
+    left: 5%;
+    margin-bottom: 20px;
 }
 
 .new-task-btn {
@@ -252,37 +358,128 @@ textarea {
     transform: translate(-60px, 58px);
 }
 
-.task-list-div {
+/* the entire strip */
+.task-list-strip {
     display: flex;
     align-items: stretch;  /* doesn't actually need to be set cos it's the default behaviour of flex, but ah well why not */
+    column-gap: 0px;
     margin-right: auto;
-    margin-left: 1%;
-    font-size: 18px;
-    width: 89%;
-    /* position: relative;
-    left: -9%; */
+    margin-left: 5%;
+    margin-bottom: 20px;
+    width: 86%;
     /* border: 1px solid black; */
 }
 
-.task-list-li-thumb {
-    
+.task-list-strip:hover {
+    cursor: pointer;
+    background-color: rgb(221, 221, 221);
 }
 
+.task-list-li-thumb {
+    background-color: transparent;
+    width: 1%;
+}
+
+.task-list-li-thumb.highlighted {
+    background-color: #069494;
+    width: 1%;
+}
+
+/* the task name section */
 .task-list-li {
     list-style-type: none;
-    padding: 10px 0;
+    padding: 5px 0;
     margin-right: auto;
-    margin-left: 1%;
+    margin-left: 0;
     font-size: 18px;
-    width: 89%;
-    /* position: relative;
-    left: -9%; */
+    width: 97%;
+    display: inline;
+    /* display: flex;
+    justify-content: flex-start; */
     /* border: 1px solid black; */
 }
 
 .task-list-li.highlighted {
-    background-color: #0694943c;
+    /* background-color: #0aefef1f; */
+    background: #0AEFEF1F;
+    background: linear-gradient(90deg, rgba(10, 239, 239, 0.12) 0%, rgba(10, 239, 239, 0.06) 50%, rgba(10, 239, 239, 0) 100%);
+}
+
+.task-checkbox {
+    cursor: pointer;
+}
+
+/* task index: 1. 2. 3. etc */
+.task-index {
+    font-weight: 700;
+    color: #fa730cc4;
+}
+
+.task-index.highlighted {
     color: #069494;
+}
+
+.task-name-strip {      /* not using anymore */
+    display: inline;
+    /* flex-wrap: wrap;
+    align-items: center;
+    margin-left: 0 !important;
+    margin-right: auto !important; */
+}
+
+/* task name text */
+.task-name {
+    font-weight: 500;
+    min-width: 0;
+}
+
+.task-name.highlighted {
+    color: #058080;
+}
+
+/* difficulte + priority note within the strip */
+.ts-difficulty-priority-notation {
+    font-style: italic;
+    color: #1e1e1e98;
+    min-width: 0;
+}
+
+.task-progress-indicator {
+    height: 16px;
+    width: max-content;
+    min-width: 0;
+    padding: 0 6px;
+    margin-left: 10px;
+    /* display: inline-flex; */      /* <--- this will be the display setting */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 12px;
+    border-radius: 16px;
+    border: 1px solid black;
+}
+
+.task-progress-indicator-blob {
+    height: 7px;
+    width: 7px;
+    margin-right: 3px;
+    border-radius: 7px;
+    background-color: #FA750C;
+}
+
+.task-progress-indicator-text {
+    font-size: 14px;
+    font-style: italic;
+    font-family: "PT Serif", serif;
+    font-weight: 400;
+}
+
+/* forcing all task strip elements to start from the left due to global css rule forcing everything to center */
+.task-list-li, .task-name, .ts-difficulty-priority-notation, .task-progress-indicator {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left;
 }
 
 /* CUSTOM CHECKBOX, HALFWAY */
@@ -295,6 +492,13 @@ textarea {
 }
 
 /* top 3 highlighted tasks */
+.highlighted-tasks-section {
+    padding-bottom: 50px;
+    border-radius: 40px;
+    border: 1px solid #069494;
+    width: 95%;
+}
+
 .highlighted-tasks-title {
     font-size: 24px;
     font-weight: 700;
@@ -303,12 +507,32 @@ textarea {
     left: 4%; */
     margin-right: auto;  /* to push elements within 'justify-content: center' parent containers all the way to the left */
     margin-left: 5%;  /* then this pushes the item right a lil' */
-    padding: 10px 0 10px 0;
+    padding: 27px 0;
     width: fit-content;
     /* border: 1px solid black; */
 }
 
-/* CONTINUE LATER: CUSTOM CHECKBOX */
+/* prompt to scroll down to reveal more tasks */
+.scroll-reveal-more-tasks {
+    height: 15vh;
+    margin-right: auto;
+    margin-left: 5%;
+    padding-bottom: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+}
+
+.scroll-prompt-text {
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e1e1e7f;
+    width: fit-content;
+    margin-right: auto;
+    margin-left: 3px;
+}
 
 .add-task-pane {
     position: absolute;
@@ -511,6 +735,17 @@ textarea {
 
 .difficulty-pane button:hover {
     background-color: #ff8120;
+}
+
+.progress-select {
+    height: 30px;
+    width: 80px;
+    border: 1px solid black;
+    background-color: transparent;
+}
+
+.progress-select label {
+    margin-right: 5px;
 }
 
 .save-btn {

@@ -19,26 +19,37 @@
             <!-- test <span>this is the main main frame</span> -->
             <!-- Folder pane -->
             <?php include('web_components/folder_pane.php') ?>
+            <div class="vertical-container toggle-and-tasks-group">
+                <!-- Switch toggle to 'show/hide completed tasks' -->
+                <?php include('web_components/task_complete_view_toggle.php'); ?>
+                <!-- main functioning container -->
+                <div class="main-functioning-container">
+                    <?php 
+                        // if task list empty, pull up prompt to add new task
+                        include('web_components/empty_view_new_task_prompt.php');
+                        // else, JavaScript handling case where list exists
+                        // list strip template (hidden from view)
+                        include('web_components/task_list_strip.php');
 
-            <!-- main functioning container -->
-            <div class="main-functioning-container" id="taskArea">
-                <?php 
-                    // if task list empty, pull up prompt to add new task
-                    include('web_components/empty_view_new_task_prompt.php');
-                    // else, JavaScript handling case where list exists
+                        // suggested tasks to complete
+                        // include('web_components/highlighted_tasks_section.php');
 
-                    // suggested tasks to complete
-                    include('web_components/highlighted_tasks_section.php');
-                ?>
-                <!-- add task button -->
-                <?php include('web_components/add_task_button.php') ?>
+                        // main tasks + suggested tasks to complete
+                        include('web_components/main_task_display.php');
+
+                        // hidden/revealed completed tasks
+                        include('web_components/task_complete_display.php');
+                    ?>
+                    <!-- add task button -->
+                    <?php include('web_components/add_task_button.php') ?>
+                </div>
             </div>
         </div>
 
         <!-- dimmed overlay -->
         <div class="dimmed-overlay" id="overlay"></div>
 
-        <?php include('web_components/add_task_pane.php') ?>
+        <?php include('web_components/add_edit_task_pane.php') ?>
 
         <!-- success/error status -->
         <div id="successErrorStatus" class="success-error-status"></div>
@@ -48,9 +59,13 @@
             // Initialising button for adding new tasks
             const newTaskBtn = document.getElementById('newTaskBtn');
             // Element where tasks will be populated
-            const taskarea = document.getElementById('taskArea');
+            const taskarea = document.getElementById('defaultListTaskArea');
+            // Highlighted tasks area
+            const highlights = document.getElementById('highlightedSection');
             // Initialising add task pane
             const addEditTaskPane = document.getElementById('addEditTaskPane');
+            // boolean to let system know if we're in add mode or edit mode
+            let isEditMode = false;
             // Initialising close add task pane
             const closeAddEditTaskPaneBtn = document.getElementById('closeAddEditTaskPaneBtn');
             // Initialising dimmed overlay
@@ -60,6 +75,8 @@
         </script>
         <script src="js/loadtasks.js"></script> <!-- checks if incomplete tasks exist in the folder, then populates main area accordingly -->
         <script src="js/taskcompletehandler.js" defer></script>
+        <script src="js/appsettings.js" defer></script>
         <script src="js/addtaskpane.js" defer></script>
+        <script src="js/edittaskpane.js" defer></script>
     </body>
 </html>

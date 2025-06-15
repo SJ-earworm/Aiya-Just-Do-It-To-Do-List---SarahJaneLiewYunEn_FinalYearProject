@@ -1,77 +1,4 @@
 // CHECK DATABASE FOR EXISTENCE OF TASKS IN THE SELECTED LIST
-// document.addEventListener('DOMContentLoaded', function () {
-//     fetch('http:/Aiya Just Do It (FYP retake)/db/tasklist_db.php')
-//     .then(response => response.json()) // retrieving response from backend
-//     .then(tasks => {
-//         // element where tasks will be populated
-//         const taskarea = document.getElementById('taskArea');
-
-//         // if data received is not an array or is empty, trigger sequence below
-//         if (!Array.isArray(tasks) || tasks.length === 0) {
-//             // bring up the 'Add Tasks' prompt
-//             document.getElementById('addNewTasksPrompt').visibility = 'visible';
-//         } else {
-//             // hide 'Add Tasks' prompt
-//             document.getElementById('addNewTasksPrompt').visibility = 'hidden';
-//         }
-
-
-//         // populate with tasks if $tasks[] filled
-//         // creating list to hold tasks (create first then append to main display later)
-//         const ul = document.createElement('ul');
-//         // increment counter for task numbering
-//         let taskorder = 1;
-
-//         // populating list
-//         tasks.forEach(task => {
-//             // creating one li only when there's a task to display
-//             const li = document.createElement('li');
-//             li.className = 'task-list-li';  // giving the created li a className
-
-//             // creating checkbox element to be appended to task list
-//             const checkbox = document.createElement('input');
-//             checkbox.type = 'checkbox';
-//             checkbox.id = `${task.task_ID}`;
-//             // if task marked as complete, checkbox to be rendered as checked
-//             if (task.prog_status == 2) {
-//                 checkbox.checked = true;
-//             }
-//             // add click event listener to checkbox -> to trigger handleTaskComplete() & pass the event info into taskcompletehandler.js
-//             checkbox.addEventListener('click', handleTaskComplete);
-            
-
-//             // append task_name + list index to li
-//             const listtextcontent = document.createTextNode(`${taskorder}. ${task.task_name}`);  // JavaScript template literal -> embedding JavaScript object properties' 
-//                                                                                                 // value directly into string
-//                                                                                                 // 'task.task_name' to access the task_name db value from the array (or else it'll just return 'Object')
-
-//             // append checkbox to the li
-//             li.appendChild(checkbox);
-//             // append list text to the li
-//             li.appendChild(listtextcontent);
-
-//             // appending li to the bigger ul
-//             ul.appendChild(li);
-
-//             // increment taskorder index
-//             taskorder++;
-//         });
-
-//         // appending the ul to the display area
-//         taskarea.appendChild(ul);
-
-//         // clearing any pop-up error messages (in .catch section below)
-//         message.style.visibility = 'hidden';
-//     })
-//     .catch(error => {
-//         console.error('Error fetching task list: ', error);
-//         document.getElementById('successErrorStatus').innerHTML = 'Failed to load tasks';
-//         document.getElementById('successErrorStatus').style.color = 'black';
-//         document.getElementById('successErrorStatus').style.backgroundColor = '#FF9999';
-//         document.getElementById('successErrorStatus').style.visibility = 'visible';
-//     })
-// });
-
 function loadTasks() {
     fetch('http:/Aiya Just Do It (FYP retake)/db/tasklist_db.php')
     .then(response => response.json()) // retrieving response from backend
@@ -89,81 +16,109 @@ function loadTasks() {
             }
         }
 
-        // if data received is not an array or is empty, trigger sequence below
-        // if (!Array.isArray(tasks) || tasks.length === 0) {
-        //     // bring up the 'Add Tasks' prompt
-        //     document.getElementById('addNewTasksPrompt').style.visibility = 'visible';
-        // } else {
-        //     // hide 'Add Tasks' prompt
-        //     document.getElementById('addNewTasksPrompt').style.visibility = 'hidden';
-        // }
-
-
-        // populate with tasks if $tasks[] filled
-        // creating list to hold tasks (create first then append to main display later)
-        const ul = document.createElement('ul');
+        // ready made list container template
+        const liststripTemplate = document.getElementById('listStrip');
         // increment counter for task numbering
         let taskorder = 1;
 
         // populating list
         tasks.forEach(task => {
-            // creating one li only when there's a task to display
-            const li = document.createElement('li');
-            li.className = 'task-list-li';  // giving the created li a className
+            // loading only incomplete tasks (as default first, 'show incomplete tasks' will be separately handled in taskcompletehandler.js)
+            if (task.prog_status == 0 || task.prog_status == 1) {
+                // cloning the CONTENT of the 'task_list_strip.php' template
+                const listStripClone = liststripTemplate.content.cloneNode(true);
+                // accessing the clone's elements
+                const checkbox = listStripClone.querySelector('.task-checkbox');
+                const taskindex = listStripClone.querySelector('.task-index');
+                const taskname = listStripClone.querySelector('.task-name');
+                const taskDifPriorNote = listStripClone.querySelector('.ts-difficulty-priority-notation');
+                
+                // converting difficulty + priority ratings to words
+                const dbDifficulty = task.difficulty;
+                const dbPriority = task.priority;
+                let difficultyRating = '';
+                let priorityRating = '';
+                // difficulty
+                if (dbDifficulty == '1') {
+                    difficultyRating = 'Easy';
+                } else if (dbDifficulty == '2') {
+                    difficultyRating = 'Medium';
+                } else {
+                    difficultyRating = 'Hard';
+                }
+                // priority
+                if (dbPriority == '1') {
+                    priorityRating = 'Urgent';
+                } else if (dbPriority == '2') {
+                    priorityRating = 'Important';
+                } else {
+                    priorityRating = 'Not Important';
+                }
 
-            // creating checkbox element to be appended to task list
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = `${task.task_ID}`;
-            // if task marked as complete, checkbox to be rendered as checked
-            if (task.prog_status == 2) {
-                checkbox.checked = true;
+
+                // POPULATING CLONED ELEMENTS
+                // assigning taskID to the checkbox
+                checkbox.id = task.task_ID;
+                // if task marked as complete, checkbox to be rendered as checked
+                if (task.prog_status == 2) {
+                    checkbox.checked = true;
+                }
+                // add click event listener to checkbox -> to trigger handleTaskComplete() & pass the event info into taskcompletehandler.js
+                checkbox.addEventListener('click', handleTaskComplete);
+
+                // populating task order index
+                taskindex.innerHTML = `${taskorder}. `;
+                // populating task name
+                taskname.innerHTML = task.task_name;
+                // populating difficulty + priority notation
+                taskDifPriorNote.innerHTML = `(${difficultyRating}, ${priorityRating})`;
+                // displaying task progress status indicator if task is 'in progress'    [already ready made in the task strip template]
+                if (task.prog_status == 1) {
+                    listStripClone.querySelector('.task-progress-indicator').style.display = 'inline-flex';
+                }
+
+
+                // highlight if first 3 tasks
+                if (taskorder < 4) {
+                    listStripClone.querySelector('.task-list-li-thumb').classList.add('highlighted');
+                    listStripClone.querySelector('.task-list-li').classList.add('highlighted');
+                    listStripClone.querySelector('.task-index').classList.add('highlighted');
+                    listStripClone.querySelector('.task-name').classList.add('highlighted');
+
+                    // append the list to the highlighted area
+                    highlights.appendChild(listStripClone);
+
+                } else {
+                    // else, render as normal list
+                    taskarea.appendChild(listStripClone);   // taskarea declared in 'index.php'
+                }
+
+
+                // debug
+                // console.log('taskID: ', checkbox.id);
+
+
+                // appending rendered list strip to display area
+                // taskarea.appendChild(listStripClone);   // taskarea declared in 'index.php'
+
+
+                // increment taskorder index
+                taskorder++;
             }
-            // add click event listener to checkbox -> to trigger handleTaskComplete() & pass the event info into taskcompletehandler.js
-            checkbox.addEventListener('click', handleTaskComplete);
-
-            
-            // converting difficulty + priority ratings to words
-            const dbDifficulty = task.difficulty;
-            const dbPriority = task.priority;
-            let difficultyRating = '';
-            let priorityRating = '';
-            // difficulty
-            if (dbDifficulty == '1') {
-                difficultyRating = 'Easy';
-            } else if (dbDifficulty == '2') {
-                difficultyRating = 'Medium';
-            } else {
-                difficultyRating = 'Hard';
-            }
-            // priority
-            if (dbPriority == '1') {
-                priorityRating = 'Urgent';
-            } else if (dbPriority == '2') {
-                priorityRating = 'Important';
-            } else {
-                priorityRating = 'Not Important';
-            }
-
-            // append task_name + list index to li
-            const listtextcontent = document.createTextNode(`${taskorder}. ${task.task_name}   (${difficultyRating}, ${priorityRating})`);  // JavaScript template literal -> embedding JavaScript object properties' 
-                                                                                                // value directly into string
-                                                                                                // 'task.task_name' to access the task_name db value from the array (or else it'll just return 'Object')
-
-            // append checkbox to the li
-            li.appendChild(checkbox);
-            // append list text to the li
-            li.appendChild(listtextcontent);
-
-            // appending li to the bigger ul
-            ul.appendChild(li);
-
-            // increment taskorder index
-            taskorder++;
         });
 
+        // highlighted tasks title element
+        const highlighttitle = document.getElementById('highlightedTasksTitle');
+
+        // if only 3 tasks in the list, this is the title
+        if (taskorder < 4) {
+            highlighttitle.innerText = "Let's knock these 3 off the list!";
+        } else {
+            highlighttitle.innerText = "We recommend doing these first";
+        }
+
         // appending the ul to the display area
-        taskarea.appendChild(ul);   // taskarea declared in 'index.php'
+        // taskarea.appendChild(ul);   // taskarea declared in 'index.php'
 
         // clearing any pop-up error messages (in .catch section below)
         message.style.visibility = 'hidden';        // message declared in 'index.php'
@@ -177,7 +132,6 @@ function loadTasks() {
         document.getElementById('successErrorStatus').style.visibility = 'visible';
     })
 }
-
 
 
 // Trigger loadTasks() upon page load

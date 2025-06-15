@@ -22,10 +22,13 @@ const difficultySelection = document.getElementById('difficultyInput');
 
 // document.addEventListener('click', function(event));
 
+
+
 // hide task pane when clicked outside of it + when clicked on add task button again
-document.addEventListener('click', function(event) {
+function toggleAddEditTaskPane(event) {
     // NOTE: had to addEventListener to the target elements instead of assigning onclick attribute cos it couldn't work when shared among scattered elements
     
+    // ADD TASK PANE
     // add task pane still clicked
     const addEditPaneIsFocused = addEditTaskPane.contains(event.target);  // addEditTaskPane declared in 'index.php'
     // // priority pane is active (equates to not clicking on add task pane)
@@ -46,13 +49,43 @@ document.addEventListener('click', function(event) {
         dimmedOverlay.style.display = 'none';  // dimmedOverlay declared in 'index.php'
     }
 
-    // clicking add task pane button to open addTaskPane
+    // clicking add task pane button to OPEN addTaskPane
     if (addTaskButtonClicked && addEditTaskPane.style.visibility == 'hidden') {     // addEditTaskPane declared in 'index.php'
-        console.log('button clicked sos');
+        // console.log('button clicked sos');
+        // tell system we're NOT IN EDIT MODE
+        isEditMode = false;
+
+        // clearing fields (in case previously used by Edit mode)
+        if (isEditMode === false) {
+            document.getElementById('tName').value = '';
+            document.getElementById('tDescription').value = '';
+            document.getElementById('tDate').value = '';
+            document.getElementById('tTime').value = '';
+            prioritySelection.innerText = '';
+            difficultySelection.innerText = '';
+        }
+
+        // pane & overlay visibility
         addEditTaskPane.style.visibility = 'visible';  // addEditTaskPane declared in 'index.php'
         dimmedOverlay.style.display = 'block';  // dimmedOverlay declared in 'index.php'
     }
-});
+
+
+    // EDIT TASK PANE
+    // click listener on task strip
+    // const taskStrip = document.querySelectorAll('.task-list-strip');
+    // const taskStripClicked = taskStrip.contains(event.target);
+
+    // // open edit task pane when task strip clicked
+    // if (taskStripClicked && addEditTaskPane.style.visibility == 'hidden') {
+    //     console.log('task strip clicked');
+    //     addEditTaskPane.style.visibility = 'visible';
+    //     dimmedOverlay.style.display = 'block';
+    // }
+}
+
+// trigger toggleAddEditTaskPane() upon click
+document.addEventListener('click', toggleAddEditTaskPane);
 
 
 
@@ -288,8 +321,16 @@ document.addEventListener('click', function(event) {
 
 
 // ADD NEW TASK
+// test
 document.getElementById('addTaskForm').addEventListener('submit', function(event) {
     event.preventDefault();  // preventing default submit sequence from the event [which is the clicked submit button]
+
+    // checking if we're supposed to be in edit mode instead of add mode (this needs to be done this way as add & edit are sharing states)
+    if (isEditMode) {
+        // 'this' passes the form data/state to the other function    --> no need for tedious getElementById to fetch form field data
+        saveEditTask(this);     // declared in 'edittaskpane.js'
+        return;     // exiting this function, do not execute anymore beyond this point
+    }
 
     // FILTER THROUGH PRIORITY + DIFFICULTY INPUT
     let priorityMark = 0;
@@ -323,7 +364,8 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
         reminderDate: this.reminderdate.value,
         reminderTime: this.remindertime.value,
         taskPriority: priorityMark,  
-        taskDifficulty: difficultyMark
+        taskDifficulty: difficultyMark,
+        taskProgress: this.progstatus.value
     };
     console.log(formData);  // debug
 
@@ -377,10 +419,115 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
 
         // Update task list display
         // clear list first then re-render list
-        document.querySelectorAll('.task-list-li').forEach(li => {
-            li.remove();
+        document.querySelectorAll('.task-list-li').forEach(strip => {
+            strip.remove();
         });
         loadTasks();
         newTaskBtn.style.visibility = 'visible';
     })
+    .catch(error => console.error('Error adding task: ', error));
 });
+
+
+
+
+
+
+
+// document.getElementById('addTaskForm').addEventListener('submit', function(event) {
+//     event.preventDefault();  // preventing default submit sequence from the event [which is the clicked submit button]
+
+//     // FILTER THROUGH PRIORITY + DIFFICULTY INPUT
+//     let priorityMark = 0;
+//     let difficultyMark = 0;
+
+//     // priority selection
+//     if (prioritySelection.innerText == 'high') {
+//         priorityMark = 1;
+//     } else if (prioritySelection.innerText == 'medium') {
+//         priorityMark = 2;
+//     } else if (prioritySelection.innerText == 'low') {
+//         priorityMark = 3;
+//     } else if (prioritySelection.innerText == '') {
+//         priorityMark = 3;
+//     }
+//     // difficulty selection
+//     if (difficultySelection.innerText == 'easy') {
+//         difficultyMark = 1;
+//     } else if (difficultySelection.innerText == 'medium') {
+//         difficultyMark = 2;
+//     } else if (difficultySelection.innerText == 'hard') {
+//         difficultyMark = 3;
+//     } else if (difficultySelection.innerText == '') {
+//         difficultyMark = 2;
+//     }
+
+//     // manually putting user input form data into an object to be sent over to backend
+//     const formData = {
+//         taskName: this.taskname.value,
+//         taskDescription: this.taskdescription.value,
+//         reminderDate: this.reminderdate.value,
+//         reminderTime: this.remindertime.value,
+//         taskPriority: priorityMark,  
+//         taskDifficulty: difficultyMark
+//     };
+//     console.log(formData);  // debug
+
+//     // sending form data to backend file
+//     fetch('http:/Aiya Just Do It (FYP retake)/db/add_task_db.php', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type':'application/json'
+//         },
+//         body: JSON.stringify(formData)
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.status == 'success') {
+//             // clear input fields
+//             this.taskname.value = '';
+//             this.taskdescription.value = '';
+//             this.reminderdate.value = '';
+//             this.remindertime.value = '';
+//             prioritySelection.innerHTML = '';       // does not need 'this' reference cos they were declared 
+//             difficultySelection.innerHTML = '';     // outside of the form d, unlike the other form elements that weren't
+
+//             // closing add new task pane
+//             addEditTaskPane.style.visibility = 'hidden';  // addEditTaskPane declared in 'index.php'
+//             dimmedOverlay.style.display = 'none';  // dimmedOverlay declared in 'index.php'
+
+//             // visibility of system status (usability heuristics)
+//             message.innerHTML = 'Successfully added task';      
+//             message.style.color = 'green';
+//             message.style.backgroundColor = '#9CFFB0';          // message declared in 'index.php'
+//             message.style.visibility = 'visible';
+//             // hiding message after 3s
+//             setTimeout(() => {
+//                 message.style.visibility = 'hidden';
+//             }, 3000);
+//         } else {
+//             // visibility of system status (usability heuristics)
+//             message.innerHTML = data.message;
+//             message.style.color = 'black';
+//             message.style.backgroundColor = '#FF9999';      // message declared in 'index.php'
+//             message.style.visibility = 'visible';
+//             // hiding message after 3s
+//             setTimeout(() => {
+//                 message.style.visibility = 'hidden';
+//             }, 3000);
+
+//             // temporarily logging backend error to console
+//             console.log(data.log);
+//         }
+
+
+//         // Update task list display
+//         // clear list first then re-render list
+//         document.querySelectorAll('.task-list-li').forEach(strip => {
+//             strip.remove();
+//         });
+//         loadTasks();
+//         newTaskBtn.style.visibility = 'visible';
+//     })
+//     .catch(error => console.error('Error adding task: ', error));
+// });
