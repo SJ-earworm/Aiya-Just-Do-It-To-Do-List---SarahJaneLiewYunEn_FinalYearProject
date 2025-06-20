@@ -6,7 +6,7 @@
     </div>
 
     <!-- My lists selections -->
-    <div class="mylist-header">
+    <div class="mylists-header">
         <span>My lists</span>
         <!-- Add new list button -->
         <button class="add-list-btn" style="padding: 0 8px;">

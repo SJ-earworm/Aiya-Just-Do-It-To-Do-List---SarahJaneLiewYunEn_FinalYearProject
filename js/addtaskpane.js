@@ -332,6 +332,17 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
         return;     // exiting this function, do not execute anymore beyond this point
     }
 
+    // IF DATE SET WITHOUT TIME
+    const dateInput = document.getElementById('tDate');
+    const timeInput = document.getElementById('tTime');
+    // variable for default reminder time if not set
+    let time = '';
+    if (dateInput.value && !timeInput.value) {
+        time = '09:00:00';
+    } else {
+        time = timeInput.value;
+    }
+
     // FILTER THROUGH PRIORITY + DIFFICULTY INPUT
     let priorityMark = 0;
     let difficultyMark = 0;
@@ -362,7 +373,7 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
         taskName: this.taskname.value,
         taskDescription: this.taskdescription.value,
         reminderDate: this.reminderdate.value,
-        reminderTime: this.remindertime.value,
+        reminderTime: time,
         taskPriority: priorityMark,  
         taskDifficulty: difficultyMark,
         taskProgress: this.progstatus.value

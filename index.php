@@ -1,3 +1,7 @@
+<!-- session handling -->
+<?php //session_destroy() // debug ?>
+<?php require('app_config/session_handling.php') ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,37 +17,12 @@
     </head>
     <body>
         <!-- 'Header' - logo + settings icon -->
-        <?php include('web_components/header.php');     ?>
+        <?php include('web_components/header.php'); ?>
 
+        <!-- main page content area -->
         <div class="main-main-frame">
-            <!-- test <span>this is the main main frame</span> -->
-            <!-- Folder pane -->
-            <?php include('web_components/folder_pane.php') ?>
-            <div class="vertical-container toggle-and-tasks-group">
-                <!-- Switch toggle to 'show/hide completed tasks' -->
-                <?php include('web_components/task_complete_view_toggle.php'); ?>
-                <!-- main functioning container -->
-                <div class="main-functioning-container">
-                    <?php 
-                        // if task list empty, pull up prompt to add new task
-                        include('web_components/empty_view_new_task_prompt.php');
-                        // else, JavaScript handling case where list exists
-                        // list strip template (hidden from view)
-                        include('web_components/task_list_strip.php');
-
-                        // suggested tasks to complete
-                        // include('web_components/highlighted_tasks_section.php');
-
-                        // main tasks + suggested tasks to complete
-                        include('web_components/main_task_display.php');
-
-                        // hidden/revealed completed tasks
-                        include('web_components/task_complete_display.php');
-                    ?>
-                    <!-- add task button -->
-                    <?php include('web_components/add_task_button.php') ?>
-                </div>
-            </div>
+            <?php include('page_components/my_list.php') ?>
+            <?php include('page_components/focus_session.php') ?>
         </div>
 
         <!-- dimmed overlay -->
@@ -68,6 +47,15 @@
             let isEditMode = false;
             // Initialising close add task pane
             const closeAddEditTaskPaneBtn = document.getElementById('closeAddEditTaskPaneBtn');
+            // POMODORO BUTTONS & ELEMENTS
+            const pomodorotimerMode = document.getElementById('focusModeBtn');
+            const shortbreaktimerMode = document.getElementById('shortBreakModeBtn');
+            const longbreaktimerMode = document.getElementById('longBreakModeBtn');
+            const timercircle = document.getElementById('timerCircle');
+            // flags to determine which pomodoro mode it's on
+            let isPomodoro = false;
+            let isShortBreak = false;
+            let isLongBreak = false;
             // Initialising dimmed overlay
             const dimmedOverlay = document.getElementById('overlay');
             // Initialising response message pop-up box
@@ -78,5 +66,7 @@
         <script src="js/appsettings.js" defer></script>
         <script src="js/addtaskpane.js" defer></script>
         <script src="js/edittaskpane.js" defer></script>
+        <script src="js/list_pomodoroswitcher.js" defer></script>
+        <script src="js/pomodorotimer.js" defer></script>
     </body>
 </html>

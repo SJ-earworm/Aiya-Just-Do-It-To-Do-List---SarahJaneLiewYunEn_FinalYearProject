@@ -1,5 +1,5 @@
 <div class="new-task-btn" id="newTaskBtn">
     <button>
-        <img src="img/addiconwhite.png" />
+        <img src="resources/addiconwhite.png" />
     </button>
 </div>

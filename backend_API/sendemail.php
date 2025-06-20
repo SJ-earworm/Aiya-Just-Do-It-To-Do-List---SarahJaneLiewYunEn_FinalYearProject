@@ -47,10 +47,7 @@
                             font-size: 18px;
                             color: #1E1E1E;
                             width: 65%;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
+                            display: block;
                             margin-left: auto;
                             margin-right: auto;
                             padding: 50px 0;
@@ -60,6 +57,8 @@
                             font-size: 24px;
                             font-weight: 600;
                             margin-bottom: 15px;
+                            margin-left: auto;
+                            margin-right: auto;
                             display: flex;
                             flex-wrap: wrap;
                             max-width: 73.5%;
@@ -70,8 +69,16 @@
                             font-size: 21px;
                             font-style: bold;
                             margin-bottom: 40px;
+                            margin-left: auto;
+                            margin-right: auto;
                             width: 73.5%;
                             /* border: 1px solid black; */
+                        }
+
+                        .email-task-list {
+                            width: 55%;
+                            margin-left: auto;
+                            margin-right: auto;
                         }
 
                         .h3 {
@@ -126,7 +133,7 @@
                                         <div class='subtitle'>You got this! Start wherever feels lightest.</div>
                                         <div class='email-task-list'>";
                             // populating tasks
-                            foreach ($highlightsTaskData as $task) {
+                            foreach ($highlightsTaskData as $taskH) {
                                 // setting accompanying task title
                                 if ($taskcount === 0) {
                                     $tasktitle = "First, try this:";
@@ -142,7 +149,7 @@
 
                                 // attaching accompanying titles & task name to the email body
                                 $body .= "<div class='h3'>" . $tasktitle . "</div>
-                                          <div class='task'>" . htmlspecialchars($task['task_name'], ENT_QUOTES, 'UTF-8') . "</div>";   // sanitised task name
+                                          <div class='task'>" . htmlspecialchars($taskH['task_name'], ENT_QUOTES, 'UTF-8') . "</div>";   // sanitised task name
 
                                 // increment taskcount
                                 $taskcount++;
@@ -153,8 +160,8 @@
                             // accompanying title
                             $body .= "<div class='email-title'>Hey! You asked for reminders on these tasks:</div>";
                             // populating tasks
-                            foreach ($reminderTaskData as $task) {
-                                $body .= "<div class='task'>" . $task['task_name'] . "</div>";
+                            foreach ($reminderTaskData as $taskR) {
+                                $body .= "<div class='task'>" . $taskR['task_name'] . "</div>";
                             }
                         }
                         
@@ -194,20 +201,19 @@
     // getting tasks which reminder date and time match the current system time
     $query = "SELECT task_name, task_description 
                 FROM Task 
-                WHERE (reminder_date = ? AND reminder_time = ?)
-                OR reminder_date = ?";
+                WHERE reminder_date = ? AND reminder_time = ?";
 
-    $stmt = $con->prepare($query);
-    $stmt->bind_param("sss", $currentDate, $currentTime, $currentDate);
+    $stmtReminder = $con->prepare($query);
+    $stmtReminder->bind_param("ss", $currentDate, $currentTime);
     
     try {
         // error message if could not execute query
-        if (!$stmt->execute() || $stmt->errno !== 0) {
+        if (!$stmtReminder->execute() || $stmtReminder->errno !== 0) {
             error_log('SEND EMAIL PHP API | Time & Date Reminder: Failed to execute query for tasks.');
         }
 
         // retrieve task name & description
-        $result = $stmt->get_result();
+        $result = $stmtReminder->get_result();
         if (!$result) {
             error_log('SEND EMAIL PHP API | Time & Date Reminder: Error fetching tasks for the email.');
             
@@ -216,10 +222,6 @@
             while ($row = $result->fetch_assoc()) {
                 $reminderTaskData[] = $row;
             }
-
-            // close statement
-            $stmt->close();
-
             // configuring the content version
             // passing in $sendTaskHighlights, $highlightsTaskData, $reminderTaskData cos functions cannot access variables declared outside unless passed into (bruh how did you forget)
             $body = emailBody($sendTaskHighlights, $highlightsTaskData, $reminderTaskData);
@@ -236,7 +238,7 @@
         }
         
         // close statement
-        $stmt->close();
+        $stmtReminder->close();
 
        
     } catch (mysqli_sql_exception $e) {
@@ -259,16 +261,16 @@
 
         // query for tasks
         $query = "SELECT task_name, task_description FROM Task WHERE prog_status != 2 ORDER BY difficulty ASC, priority ASC";
-        $stmt = $con->prepare($query);
+        $stmtHighlights = $con->prepare($query);
 
         try {
             // error
-            if (!$stmt->execute() || $stmt->errno !== 0) {
+            if (!$stmtHighlights->execute() || $stmtHighlights->errno !== 0) {
                 error_log('SEND EMAIL PHP API | Task Highlights: Failed to execute query for tasks.');
             }
 
             // retrieve task name & description
-            $result = $stmt->get_result();
+            $result = $stmtHighlights->get_result();
             // if error in returning result
             if (!$result) {
                 error_log('SEND EMAIL PHP API | Task Highlights: Error fetching tasks for the email.');
@@ -295,12 +297,15 @@
             }
 
             // close statement
-            $stmt->close();
+            $stmtHighlights->close();
 
 
         } catch (mysqli_sql_exception $e) {
             // catch exceptions
             error_log('SEND EMAIL PHP API | Task Highlights Catch block error: ' . $e->getMessage());
         }
+
+        // resetting $sendTaskHighlights flag
+        $sendTaskHighlights = false;
     }
 ?>
