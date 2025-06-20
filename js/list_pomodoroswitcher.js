@@ -35,8 +35,6 @@ function toggleGeneralAppMode() {
         timercircle.classList.add('pomodoro');   // 'timercircle' declared in index.php
         // telling the system to be on the pomodoro timer mode (for 'pomodorotimer.js')
         isPomodoro = true; // 'isPomodoro' flag declared in 'index.php'
-        // debug
-        console.log('app mode view toggled, entering setDefaultTimerModeInterval()');
         // setting default pomodoro timer
         setDefaultTimerModeInterval();
     }
@@ -44,9 +42,7 @@ function toggleGeneralAppMode() {
 
 // setting default timer values for 'pomodorotimer.js' [have to declare in this file because toggleGeneralAppMode() needs to call it]
 function setDefaultTimerModeInterval() {
-    if (isPomodoro){
-        // debug
-        console.log('about to fetch() timer values from session_pomodoro_value_set.php');
+    if (isPomodoro && !isShortBreak && !isLongBreak){
         // retrieve timer values set in session variables
         fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=pomodoro', {
             method: 'GET'
@@ -57,10 +53,9 @@ function setDefaultTimerModeInterval() {
             setTimer(data.minutehand, data.secondhand);   // setTimer() in 'pomodorotimer.js'
         })
 
-        console.log('did we come out the other side?');
         // set default pomodoro interval upon intial page load
         // setTimer(25, 0);
-    } else if (isShortBreak) {
+    } else if (isShortBreak && !isPomodoro && !isLongBreak) {
         // retrieve timer values set in session variables
         fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=short', {
             method: 'GET'
@@ -72,7 +67,7 @@ function setDefaultTimerModeInterval() {
         })
         // set default short break interval upon intial page load
         // setTimer(5, 0);
-    } else if (isLongBreak) {
+    } else if (isLongBreak && !isPomodoro && !isShortBreak) {
         // retrieve timer values set in session variables
         fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=long', {
             method: 'GET'

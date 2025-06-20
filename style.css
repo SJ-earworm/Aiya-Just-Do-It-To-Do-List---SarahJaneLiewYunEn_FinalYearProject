@@ -954,10 +954,13 @@ textarea {
     /* border: 1px solid whitesmoke; */
 }
 
-.custom-timer-box {
+.timer-settings {
     position: absolute;
     top: 50%;
     right: 18%;
+}
+
+.custom-timer-box {
     padding: 20px;
     border-radius: 15px;
     background-color: whitesmoke;
@@ -991,4 +994,31 @@ textarea {
     border: 0.5px solid #1E1E1E;
     background-color: transparent;
     text-align: center;
+}
+
+.reset-default-timer-btn {
+    border: none;
+    border-radius: 15px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1E1E1E;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-default-timer-btn button {
+    /* border: none;
+    border-radius: 15px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1E1E1E; */
+    /* display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; */
 }

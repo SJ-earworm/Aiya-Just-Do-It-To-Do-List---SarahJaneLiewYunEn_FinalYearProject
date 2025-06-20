@@ -25,13 +25,18 @@
 
     // setting timeout after 5 minutes inactivity for demo purposes --> (in real-world scenario, would be 5 hours)
     $timeout = 300;   // 300 secs = 5mins
-    $timeSinceLastActivity = time() - $_SESSION['LAST_ACTIVITY'];   // time() gives the current time when the script is executed (a.k.a. activity)
+    // run only if $_SESSION['LAST_ACTIVITY'] exists at runtime
+    if (isset($_SESSION['LAST_ACTIVITY'])) {
+        // calculating the time interval since the previous active run
+        $timeSinceLastActivity = time() - $_SESSION['LAST_ACTIVITY'];   // time() gives the current time when the script is executed (a.k.a. activity)
 
-    if (isset($_SESSION['LAST_ACTIVITY']) && $timeSinceLastActivity > $timeout) {
-        // clear session data - clear the timer values set to session
-        session_unset();
-        // close session so that we get a clean session reset the next time the site launches
-        session_destroy();
+        // if user has been idle longer than the specified timeout count, nuke session
+        if ($timeSinceLastActivity > $timeout) {
+            // clear session data - clear the timer values set to session
+            session_unset();
+            // close session so that we get a clean session reset the next time the site launches
+            session_destroy();
+        }
     }
 
     // the LAST_ACTIVITY detected & recorded will be here
