@@ -5,12 +5,12 @@
     $timerdata = json_decode(file_get_contents('php://input'), true);   // extracting key-value pairs sent over from formData
                                                                         // the 'true' parameter: controls the type of PHP data structure JSON objects are converted into. 'true' allows us to access the json data using associative arrays e.g. $frontend_data['task_ID']
 
-    $pomMinsInput = $timerdata['pomodoro_minutes'] ?? '';
-    $pomSecsInput = $timerdata['pomodoro_seconds'] ?? '';
-    $shortBrMinsInput = $timerdata['short_break_minutes'] ?? '';      // ?? is the null coalescing operator to set the right-side scenario if variable is found to be null
-    $shortBrSecsInput = $timerdata['short_break_seconds'] ?? '';
-    $longBrMinsInput = $timerdata['long_break_minutes'] ?? '';
-    $longBrSecsInput = $timerdata['long_break_seconds'] ?? '';
+    $pomMinsInput = filter_var($timerdata['pomodoro_minutes'] ?? '', FILTER_SANITIZE_NUMBER_INT);
+    $pomSecsInput = filter_var($timerdata['pomodoro_seconds'] ?? '', FILTER_SANITIZE_NUMBER_INT);
+    $shortBrMinsInput = filter_var($timerdata['short_break_minutes'] ?? '', FILTER_SANITIZE_NUMBER_INT);      // ?? is the null coalescing operator to set the right-side scenario if variable is found to be null
+    $shortBrSecsInput = filter_var($timerdata['short_break_seconds'] ?? '', FILTER_SANITIZE_NUMBER_INT);
+    $longBrMinsInput = filter_var($timerdata['long_break_minutes'] ?? '', FILTER_SANITIZE_NUMBER_INT);
+    $longBrSecsInput = filter_var($timerdata['long_break_seconds'] ?? '', FILTER_SANITIZE_NUMBER_INT);
 
     if (!($pomMinsInput == '') || !($pomSecsInput == '')) {
         // pomodoro timer

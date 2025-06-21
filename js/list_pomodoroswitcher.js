@@ -50,7 +50,7 @@ function setDefaultTimerModeInterval() {
         .then(response => response.json())
         .then(data => {
             // set default pomodoro interval upon intial page load
-            setTimer(data.minutehand, data.secondhand);   // setTimer() in 'pomodorotimer.js'
+            setTimer(Number(data.minutehand), Number(data.secondhand));   // setTimer() in 'pomodorotimer.js'
         })
 
         // set default pomodoro interval upon intial page load
@@ -63,7 +63,7 @@ function setDefaultTimerModeInterval() {
         .then(response => response.json())
         .then(data => {
             // set default pomodoro interval upon intial page load
-            setTimer(data.minutehand, data.secondhand);   // setTimer() in 'pomodorotimer.js'
+            setTimer(Number(data.minutehand), Number(data.secondhand));   // setTimer() in 'pomodorotimer.js'
         })
         // set default short break interval upon intial page load
         // setTimer(5, 0);
@@ -75,7 +75,7 @@ function setDefaultTimerModeInterval() {
         .then(response => response.json())
         .then(data => {
             // set default pomodoro interval upon intial page load
-            setTimer(data.minutehand, data.secondhand);   // setTimer() in 'pomodorotimer.js'
+            setTimer(Number(data.minutehand), Number(data.secondhand));   // setTimer() in 'pomodorotimer.js'
         })
         // set default pomodoro interval upon intial page load
         // setTimer(15, 0);

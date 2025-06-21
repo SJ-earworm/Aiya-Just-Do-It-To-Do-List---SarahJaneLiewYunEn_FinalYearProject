@@ -961,24 +961,39 @@ textarea {
 }
 
 .custom-timer-box {
-    padding: 20px;
+    /* padding: 20px; */    /* <-- apply this when opened */
+    padding: 8px 15px;
+    /* padding: 0 15px; */
     border-radius: 15px;
     background-color: whitesmoke;
     color: #1E1E1E;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    max-height: 50px;
+    max-width: 125px;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
 }
 
-.custom-timer-box button {
-    background-color: #FA750C;
-    padding: 5px 14px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 0 30%;;
-    font-size: 18px;
-    font-weight: 500;
-    color: whitesmoke;
+.custom-timer-box.expanded {
+    padding: 20px;
+    max-height: 140px;
+    max-width: max-content;
+}
+
+.custom-timer-box-content {
+    max-height: 0;
+    opacity: 0;  /* starts invisible */
+    overflow: hidden;  /* makes sure content doesn't overflow the minimised box */
+    transition: max-height 0.5s ease-out, opacity 0.4s ease-out 0.1;
+}
+
+.custom-timer-box-content.expanded {
+    max-height: 200px;
+    opacity: 1;
+    overflow: visible;
 }
 
 .custom-time-wrap {
@@ -996,13 +1011,30 @@ textarea {
     text-align: center;
 }
 
+.custom-timer-box-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.custom-timer-box-btns button {
+    background-color: #FA750C;
+    padding: 5px 14px;
+    margin: 5px 3px;
+    border: none;
+    border-radius: 0 30%;;
+    font-size: 18px;
+    font-weight: 500;
+    color: whitesmoke;
+}
+
 .reset-default-timer-btn {
     border: none;
     border-radius: 15px;
     margin-top: 20px;
     padding: 10px 20px;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     color: #1E1E1E;
     display: flex;
     flex-direction: row;

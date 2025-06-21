@@ -28,10 +28,16 @@ function setTimer(setMinutes, setSeconds) {
     secondCount = setSeconds;  // from function parameter 2
     currentTimeDisp = `${String(minuteCount).padStart(2, '0')}:${String(secondCount).padStart(2, '0')}`;
     timerDisplay.innerHTML = currentTimeDisp;
+
+    // debug
+    console.log('setTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
 }
 
 // function to prep time values for system-time-based timer + trigger timer run
 function startTimer() {
+    // debug
+    console.log('startTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
+
     totalDuration = (minuteCount * 60 + secondCount) * 1000;   // turning total time (minute + seconds) into milliseconds to be read by the Date function/object
     timerStartStamp = Date.now();   // getting the start time's millisecond timestamp from real-time clock
                                     // using Date.now() instead of the earlier setInterval() because Date.now() provides the correct running time even when tab inactive
@@ -257,6 +263,72 @@ function applyStyle() {
 
 
 
+// TIMER SETTINGS
+// open custom time box
+document.addEventListener('click', function (event) {
+    // elements
+    const customtimerpane = document.getElementById('customTimerPane');
+    const customtimercontent = document.getElementById('customTimerBoxCont');
+    // checking applied styles
+    // const customtimerContDisp = window.getComputedStyle(customtimercontent).getPropertyValue('display');
+    // clicks
+    const customtimerpaneClicked = customtimerpane.contains(event.target);
+
+    // expand custom timer details
+    if (customtimerpaneClicked && !(customtimerpane.classList.contains('expanded'))) {
+        // expanding box
+        customtimerpane.classList.add('expanded');
+        customtimercontent.classList.add('expanded');;
+
+        // autofill minutes-seconds input fields
+        if (isPomodoro && !isShortBreak && !isLongBreak){
+            // retrieve timer values set in session variables
+            fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=pomodoro', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // fill minutes-seconds input fields
+                customMinuteInput.value = Number(data.minutehand);
+                customSecondInput.value = Number(data.secondhand);
+            })
+
+        } else if (isShortBreak && !isPomodoro && !isLongBreak) {
+            // retrieve timer values set in session variables
+            fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=short', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // fill minutes-seconds input fields
+                customMinuteInput.value = Number(data.minutehand);
+                customSecondInput.value = Number(data.secondhand);
+            })
+            
+        } else if (isLongBreak && !isPomodoro && !isShortBreak) {
+            // retrieve timer values set in session variables
+            fetch('http:/Aiya Just Do It (FYP retake)/app_config/session_pomodoro_value_set.php?pommode=long', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // fill minutes-seconds input fields
+                customMinuteInput.value = Number(data.minutehand);
+                customSecondInput.value = Number(data.secondhand);
+            })
+        }
+
+
+
+        // close if clicked ouside of the pane
+    } else if (!customtimerpaneClicked && customtimerpane.classList.contains('expanded')) {
+        customtimerpane.classList.remove('expanded');
+        customtimercontent.classList.remove('expanded');
+    }
+})
+
+
+
 // SETTING CUSTOM TIME
 document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
     // set custom time only if the minutes and/or seconds fields contain text
@@ -267,14 +339,14 @@ document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
             if (customMinuteInput.value == '') {
                 minuteCount = 0;   // set default 0 if minute field empty
             } else {
-                minuteCount = customMinuteInput.value;   // else set custom value to minute counter
+                minuteCount = Number(customMinuteInput.value);   // else set custom value to minute counter
             }
 
             // second field
             if (customSecondInput.value == '') {
                 secondCount = 0;  // set default 0 if second field empty
             } else {
-                secondCount = customSecondInput.value;  // else set custom value to second counter
+                secondCount = Number(customSecondInput.value);  // else set custom value to second counter
             }
 
 
@@ -298,14 +370,14 @@ document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
             if (customMinuteInput.value == '') {
                 minuteCount = 0;   // set default 0 if minute field empty
             } else {
-                minuteCount = customMinuteInput.value;   // else set custom value to minute counter
+                minuteCount = Number(customMinuteInput.value);   // else set custom value to minute counter
             }
 
             // second field
             if (customSecondInput.value == '') {
                 secondCount = 0;  // set default 0 if second field empty
             } else {
-                secondCount = customSecondInput.value;  // else set custom value to second counter
+                secondCount = Number(customSecondInput.value);  // else set custom value to second counter
             }
 
             // save custom value to session
@@ -326,14 +398,14 @@ document.getElementById('setCustomTimeBtn').addEventListener('click', () => {
             if (customMinuteInput.value == '') {
                 minuteCount = 0;   // set default 0 if minute field empty
             } else {
-                minuteCount = customMinuteInput.value;   // else set custom value to minute counter
+                minuteCount = Number(customMinuteInput.value);   // else set custom value to minute counter
             }
 
             // second field
             if (customSecondInput.value == '') {
                 secondCount = 0;  // set default 0 if second field empty
             } else {
-                secondCount = customSecondInput.value;  // else set custom value to second counter
+                secondCount = Number(customSecondInput.value);  // else set custom value to second counter
             }
 
             // save custom value to session
@@ -396,16 +468,6 @@ document.addEventListener('click', function(event) {
         return;   // exit function if none of these buttons clicked
     }
 
-
-    // clearing all active styles applied first
-    // pomodorotimerMode.classList.remove('active');
-    // shortbreaktimerMode.classList.remove('active');
-    // longbreaktimerMode.classList.remove('active');
-
-    // timercircle.classList.remove('pomodoro', 'short-break', 'long-break');
-
-
-
     // setting mode flags according to button click
     if (pomBtnClicked) {
         isPomodoro = true;  // activating pomodoro flag (declared in index.php)
@@ -434,19 +496,6 @@ document.addEventListener('click', function(event) {
 
     // apply styles according to the flags
     applyStyle();
-    // if (isPomodoro && !isShortBreak && !isLongBreak) {
-    //     // apply pomodoro active styles
-    //     pomodorotimerMode.classList.add('active');   // 'pomodorotimerMode' declared in index.php
-    //     timercircle.classList.add('pomodoro');   // 'timercircle' declared in index.php
-    // } else if (isShortBreak && !isPomodoro && !isLongBreak) {
-    //     // apply pomodoro active styles
-    //     shortbreaktimerMode.classList.add('active');   // 'pomodorotimerMode' declared in index.php
-    //     timercircle.classList.add('short-break');   // 'timercircle' declared in index.php
-    // } else if (isLongBreak && !isPomodoro && !isShortBreak) {
-    //     // apply pomodoro active styles
-    //     longbreaktimerMode.classList.add('active');   // 'pomodorotimerMode' declared in index.php
-    //     timercircle.classList.add('long-break');   // 'timercircle' declared in index.php
-    // }
 
     setDefaultTimerModeInterval();
 })
