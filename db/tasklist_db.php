@@ -27,7 +27,20 @@
             // Loop to compile query results in tasks[]
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $tasks[] = $row;
+                    $taskID = $row['task_ID'];
+                    $escapedTaskName = htmlspecialchars($row['task_name'], ENT_QUOTES);
+                    $priority = $row['priority'];
+                    $difficulty = $row['difficulty'];
+                    $progress = $row['prog_status'];
+                    // $tasks[] = $row;
+
+                    $tasks[] = [
+                        'task_ID' => $taskID,
+                        'task_name' => $escapedTaskName,
+                        'priority' => $priority,
+                        'difficulty' => $difficulty,
+                        'prog_status' => $progress
+                    ];
                 }
             }
 

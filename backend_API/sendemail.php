@@ -4,7 +4,8 @@
 
 
 
-    // error handling
+    // error display configuation
+    error_reporting(E_ALL | E_STRICT);
     ini_set('display_errors', 1);   // show errors ON THE SCREEN. 1 = on, 2 = off. TURN OFF LATER
     ini_set('display_startup_errors', 1);   // show startup errors ON THE SCREEN. TURN OFF LATER    [startup errors are rare, occurs during PHP's startup process]
     ini_set('log_errors', 'On');    // save logs to the file set below
@@ -158,10 +159,11 @@
                             // if we're in reminder mode
                         } else {
                             // accompanying title
-                            $body .= "<div class='email-title'>Hey! You asked for reminders on these tasks:</div>";
+                            $body .= "<div class='email-title'>Hey! You asked for reminders on these tasks:</div>
+                                        <div class='email-task-list'>";
                             // populating tasks
                             foreach ($reminderTaskData as $taskR) {
-                                $body .= "<div class='task'>" . $taskR['task_name'] . "</div>";
+                                $body .= "<li><ul class='task'>" . $taskR['task_name'] . "</ul></li>";
                             }
                         }
                         

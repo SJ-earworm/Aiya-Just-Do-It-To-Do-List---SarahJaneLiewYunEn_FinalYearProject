@@ -1,7 +1,8 @@
 // Variables globally used throughout this script
 const prioritypane = document.getElementById('priorityPane');
 const difficultypane = document.getElementById('difficultyPane');
-let priorityDifficultyPaneIsActive = false  // setting state as false first -> for locking add task pane when priority + difficulty panes are active
+let priorityDifficultyPaneIsActive = false;  // setting state as false first -> for locking add task pane when priority + difficulty panes are active
+let deleteConfirmationDialogIsActive = false;   // for task delete confirmation dialog in 'edittaskpane.js'
 
 // Initialising priority 'select dropdown' input choice
 const prioritySelection = document.getElementById('priorityInput');
@@ -40,8 +41,9 @@ function toggleAddEditTaskPane(event) {
     const xBtn = closeAddEditTaskPaneBtn.contains(event.target);  // closeAddEditTaskPaneBtn declared in 'index.php'
 
     
+    // CONTROLLING WHETHER ADDEDITTASKPANE STAYS OPEN OR NOT
     // if addTaskPane out of focus or add task button clicked (<- this one temporarily out of order)
-    if (priorityDifficultyPaneIsActive && !addEditPaneIsFocused) {
+    if ((priorityDifficultyPaneIsActive || deleteConfirmationDialogIsActive) && !addEditPaneIsFocused) {
         addEditTaskPane.style.visibility = 'visible';  // addEditTaskPane declared in 'index.php'
         dimmedOverlay.style.display = 'block';  // dimmedOverlay declared in 'index.php'
     } else if (!addEditPaneIsFocused || xBtn || addTaskButtonClicked && addEditTaskPane.style.visibility == 'visible') {
@@ -63,6 +65,18 @@ function toggleAddEditTaskPane(event) {
             document.getElementById('tTime').value = '';
             prioritySelection.innerText = '';
             difficultySelection.innerText = '';
+            // pane title
+            addEditTaskPaneTitle.innerHTML = '';    // clear previous title
+            addEditTaskPaneTitle.innerText = 'New Task';    // add task mode title
+            // button group setting: add task mode
+            // clearing '.edit-task-btn-group-setting' style
+            addEditTaskPaneButtonGroup.classList.remove('edit-task-btn-group-setting');
+            deleteTaskButton.style.display = 'none';
+            saveTaskButton.classList.remove('edit-task-btn-group-setting');
+
+            // adding '.add-task-btn-group' style
+            // addEditTaskPaneButtonGroup.classList.add('add-task-btn-group');   // addEditTaskPaneButtonGroup declared in 'index.php'
+            saveTaskButton.classList.add('add-task-btn-group');
         }
 
         // pane & overlay visibility
@@ -378,10 +392,10 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
         taskDifficulty: difficultyMark,
         taskProgress: this.progstatus.value
     };
-    console.log(formData);  // debug
+    // console.log(formData);  // debug
 
     // sending form data to backend file
-    fetch('http:/Aiya Just Do It (FYP retake)/db/add_task_db.php', {
+    fetch('db/add_task_db.php', {
         method: 'POST',
         headers: {
             'Content-Type':'application/json'
@@ -403,6 +417,14 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
             addEditTaskPane.style.visibility = 'hidden';  // addEditTaskPane declared in 'index.php'
             dimmedOverlay.style.display = 'none';  // dimmedOverlay declared in 'index.php'
 
+            // Update task list display
+            // clear list first then re-render list
+            document.querySelectorAll('.task-list-li').forEach(strip => {
+                strip.remove();
+            });
+            loadTasks();
+            newTaskBtn.style.visibility = 'visible';
+
             // visibility of system status (usability heuristics)
             message.innerHTML = 'Successfully added task';      
             message.style.color = 'green';
@@ -412,7 +434,7 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
             setTimeout(() => {
                 message.style.visibility = 'hidden';
             }, 3000);
-        } else {
+        } else if (data.status == 'fail') {
             // visibility of system status (usability heuristics)
             message.innerHTML = data.message;
             message.style.color = 'black';
@@ -424,17 +446,30 @@ document.getElementById('addTaskForm').addEventListener('submit', function(event
             }, 3000);
 
             // temporarily logging backend error to console
-            console.log(data.log);
+            // console.log(data.log);
+        } else if (data.status == 'invalid') {
+            // debug
+            // console.log(data.status, ', ', data.message);
+            // console.log(message);
+            // visibility of system status (usability heuristics)
+            message.innerHTML = data.message;
+            message.style.color = 'black';
+            message.style.backgroundColor = '#FF9999';      // message declared in 'index.php'
+            message.style.visibility = 'visible';
+            // hiding message after 3s
+            setTimeout(() => {
+                message.style.visibility = 'hidden';
+            }, 5000);
         }
 
 
         // Update task list display
         // clear list first then re-render list
-        document.querySelectorAll('.task-list-li').forEach(strip => {
-            strip.remove();
-        });
-        loadTasks();
-        newTaskBtn.style.visibility = 'visible';
+        // document.querySelectorAll('.task-list-li').forEach(strip => {
+        //     strip.remove();
+        // });
+        // loadTasks();
+        // newTaskBtn.style.visibility = 'visible';
     })
     .catch(error => console.error('Error adding task: ', error));
 });

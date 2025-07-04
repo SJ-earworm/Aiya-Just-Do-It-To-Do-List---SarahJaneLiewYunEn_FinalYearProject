@@ -30,13 +30,13 @@ function setTimer(setMinutes, setSeconds) {
     timerDisplay.innerHTML = currentTimeDisp;
 
     // debug
-    console.log('setTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
+    // console.log('setTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
 }
 
 // function to prep time values for system-time-based timer + trigger timer run
 function startTimer() {
     // debug
-    console.log('startTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
+    // console.log('startTimer() minute: ', minuteCount, ' , seconds: ', secondCount);
 
     totalDuration = (minuteCount * 60 + secondCount) * 1000;   // turning total time (minute + seconds) into milliseconds to be read by the Date function/object
     timerStartStamp = Date.now();   // getting the start time's millisecond timestamp from real-time clock
@@ -152,7 +152,7 @@ function handleTimerEnd() {
         }
 
         // debug
-        console.log('shortBreakCount: ', shortBreakCount);
+        // console.log('shortBreakCount: ', shortBreakCount);
 
     } else if (isShortBreak) {
         // play finisher ringtone
@@ -208,7 +208,7 @@ function shortlongBreakRIngtone() {
 function sessionTimerSetResponse(data) {
     if (data.status == 'success') {
         // debug
-        console.log('minutehand: ', data.minutehand, ', secondhand: ', data.secondhand);
+        // console.log('minutehand: ', data.minutehand, ', secondhand: ', data.secondhand);
         // concatenate minute + second values
         currentTimeDisp = `${String(data.minutehand).padStart(2, '0')}:${String(data.secondhand).padStart(2, '0')}`;
         // clear timer display div first

@@ -43,6 +43,11 @@
             const highlights = document.getElementById('highlightedSection');
             // Initialising add task pane
             const addEditTaskPane = document.getElementById('addEditTaskPane');
+            const addEditTaskPaneTitle = document.getElementById('addEditTaskPaneTitle');
+            // addEditTaskPane button group
+            const addEditTaskPaneButtonGroup = document.getElementById('addEditTaskPaneBtnGroup');
+            const deleteTaskButton = document.getElementById('deleteTaskBtn');
+            const saveTaskButton = document.getElementById('saveTaskBtn');
             // boolean to let system know if we're in add mode or edit mode
             let isEditMode = false;
             // Initialising close add task pane

@@ -100,16 +100,32 @@ textarea {
     justify-content: space-between; */
 }
 
+.app-header {
+    width: 83%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid black; */
+}
+
+.logo {
+    position: relative;
+    margin-top: 0.5%;
+}
+
 .logo img {
     height: auto;
     max-width: 25%;
-    position: relative;
-    margin-top: 2%;
+    /* position: relative;
+    margin-top: 2%; */
+    /* border: 1px solid black; */
 }
 
 .list-pomodoro-mode {
-    width: 16%;
+    width: 22%;
     padding: 0;
+    position: relative;
+    right: 34%;
     list-style: none;
     font-weight: 600;
     text-align: center;
@@ -124,7 +140,7 @@ textarea {
 }
 
 .list-pomodoro-mode li {
-    padding: 5px;
+    padding: 15px 5px;
     width: 50%;
     /* border: 1px solid black; */
     background-color: transparent;
@@ -462,7 +478,7 @@ textarea {
     column-gap: 0px;
     margin-right: auto;
     margin-left: 5%;
-    margin-bottom: 20px;
+    margin-bottom: 27px;
     width: 86%;
     /* border: 1px solid black; */
 }
@@ -518,6 +534,8 @@ textarea {
 
 .task-name-strip {      /* not using anymore */
     display: inline;
+    width: 90%;
+    /* border: 1px solid black; */
     /* flex-wrap: wrap;
     align-items: center;
     margin-left: 0 !important;
@@ -651,25 +669,60 @@ textarea {
 }
 
 .add-task-pane form {
+    position: relative;
+    /* top: -5%; */
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     height: 60%;
     width: 70%;
 }
 
 .add-task-pane input[type=text] {
     height: 45px;
+    width: 100%;
+    padding-left: 17px;
     box-sizing: border-box;
-    border: none;
-    border-bottom: 2px solid #1E1E1E;
+    /* border: 0.02px solid #1e1e1e96; */
+    border-width: 3px;
+    border-style: solid;
+    border-top-color: #1e1e1e77;
+    border-left-color: #1e1e1e77;
+    border-bottom-color: #c3c3c377;
+    border-right-color: #c3c3c377;
+    /* box-shadow: 1px 1px rgba(0,0,0,0.1) inset; */
+    /* outline: #1e1e1e41; */
+    /* border-radius: 40px; */
     font-size: 18px;
+}
+
+.add-task-pane textarea {
+    height: 20%;
+    width: 96.5%;
+    margin: 9px 0;
+    border-width: 3px;
+    border-style: solid;
+    border-top-color: #1e1e1e77;
+    border-left-color: #1e1e1e77;
+    border-bottom-color: #c3c3c377;
+    border-right-color: #c3c3c377;
+}
+
+.date-time-group {
+    width: 260px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+    margin-bottom: 25px;
 }
 
 .priority-settings {    /* container for priority title & 'dropdown select' */
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin-left: auto;
+    margin-right: 1.8px;
+    margin-bottom: 6px;
     height: 25px;
     width: 170px;
     /* border: 1px solid black; */
@@ -755,7 +808,7 @@ textarea {
     flex-direction: row;
     justify-content: center;
     height: 25px;
-    width: 170px;
+    width: 230px;
     /* border: 1px solid black; */
 }
 
@@ -836,13 +889,51 @@ textarea {
 
 .progress-select {
     height: 30px;
-    width: 80px;
+    width: 100px;
+    margin-left: 10px;
     border: 1px solid black;
     background-color: transparent;
 }
 
 .progress-select label {
     margin-right: 5px;
+}
+
+.pane-btns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    /* border: 1px solid black; */
+}
+
+.pane-btns.edit-task-btn-group-setting {
+    margin-top: 20px;
+}
+
+.delete-task-btn {
+    border: none;
+    background-color: rgb(255, 28, 28);
+    color: whitesmoke;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 0 30%;
+    padding: 4% 5%;
+    margin-top: 30px;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.delete-task-btn:hover {
+    background-color: rgba(255, 28, 28, 0.685);
+}
+
+.delete-task-btn.add-task-btn-group-setting {
+    display: none;
+}
+
+.delete-task-btn.edit-task-btn-group-setting {
+    display: block;
 }
 
 .save-btn {
@@ -853,10 +944,74 @@ textarea {
     font-weight: 600;
     border-radius: 0 30%;
     padding: 4% 5%;
+    margin-top: 30px;
 }
 
 .save-btn:hover {
     background-color: #ff8120;
+}
+
+.save-btn.edit-task-btn-group-setting {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.task-delete-confirmation-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: whitesmoke;
+    height: 85%;
+    width: 25%;
+    box-shadow: 9px 9px 2px #f6f6f6;
+    border-radius: 9%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #FA750C;
+    z-index: 3;
+    visibility: hidden;  /* default display: hidden */
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.task-delete-confirmation-dialog-btns {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    color: rgb(255, 28, 28);
+    font-size: 19px;
+    font-weight: 500;
+    border: 1px solid rgb(255, 28, 28);
+    border-radius: 0 30%;
+    height: 45px;
+    width: 100px;
+}
+
+.cancel-btn:hover {
+    background-color: rgba(245, 245, 245, 0.089);
+}
+
+.cfm-delete-btn {
+    background-color: rgb(255, 28, 28);
+    color: whitesmoke;
+    font-size: 19px;
+    font-weight: 500;
+    border-radius: 0 30%;
+    border: none;
+    height: 45px;
+    width: 100px;
+}
+
+.cfm-delete-btn:hover {
+    background-color: rgba(255, 28, 28, 0.685);
 }
 
 

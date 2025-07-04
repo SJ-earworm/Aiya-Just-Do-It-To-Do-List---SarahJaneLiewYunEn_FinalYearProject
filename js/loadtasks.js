@@ -3,7 +3,7 @@ function loadTasks() {
     fetch('http:/Aiya Just Do It (FYP retake)/db/tasklist_db.php')
     .then(response => response.json()) // retrieving response from backend
     .then(tasks => {
-        // to check if prompt exists (is rendered in the html)
+        // to check if 'add new task' prompt exists (is rendered in the html)
         const newTaskPrompt = document.getElementById('addNewTasksPrompt');
         if (newTaskPrompt) {
             // if data received is not an array or is empty, trigger sequence below
@@ -60,9 +60,9 @@ function loadTasks() {
                 // assigning taskID to the checkbox
                 checkbox.id = task.task_ID;
                 // if task marked as complete, checkbox to be rendered as checked
-                if (task.prog_status == 2) {
-                    checkbox.checked = true;
-                }
+                // if (task.prog_status == 2) {
+                //     checkbox.checked = true;
+                // }
                 // add click event listener to checkbox -> to trigger handleTaskComplete() & pass the event info into taskcompletehandler.js
                 checkbox.addEventListener('click', handleTaskComplete);
 
@@ -96,6 +96,8 @@ function loadTasks() {
 
                 // debug
                 // console.log('taskID: ', checkbox.id);
+                // security test
+                // console.log('Current session cookie: ', document.cookie);
 
 
                 // appending rendered list strip to display area
@@ -120,13 +122,14 @@ function loadTasks() {
         // appending the ul to the display area
         // taskarea.appendChild(ul);   // taskarea declared in 'index.php'
 
-        // clearing any pop-up error messages (in .catch section below)
-        message.style.visibility = 'hidden';        // message declared in 'index.php'
     })
     .catch(error => {
+        // clearing any pop-up error messages (in .catch section below)
+        message.style.visibility = 'hidden';        // message declared in 'index.php'
+        
         console.error('Error fetching task list: ', error);
         // visibility of system status (usability heuristics)
-        document.getElementById('successErrorStatus').innerHTML = 'Failed to load tasks';
+        document.getElementById('successErrorStatus').innerText = 'Failed to load tasks';
         document.getElementById('successErrorStatus').style.color = 'black';
         document.getElementById('successErrorStatus').style.backgroundColor = '#FF9999';
         document.getElementById('successErrorStatus').style.visibility = 'visible';

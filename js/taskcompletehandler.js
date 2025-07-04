@@ -24,7 +24,7 @@ function handleTaskComplete(event) {
         .then(data => {
             // temporary
             if (data.status == 'success') {
-                console.log('db updated, marked as complete');
+                // console.log('db updated, marked as complete');
             } else {
                 // visibility of system status (usability heuristics)
                 message.innerHTML = data.message;

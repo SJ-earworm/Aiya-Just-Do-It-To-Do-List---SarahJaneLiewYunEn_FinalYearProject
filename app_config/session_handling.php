@@ -3,7 +3,18 @@
     // check if session has already been started, if not
     // start new session
     if (session_status() === PHP_SESSION_NONE) {
+        // setting session cookie parameters for security purposes
+        session_set_cookie_params([
+            'lifetime' => 0,        // session cookie only survives until the browser is closed
+            'path' => '/',          // the general website path -> applied to entire site, not just e.g. /db/add_task_db
+            'domain' => '',         // current domain only
+            'httponly' => true,     // cookies will only be sent in HTTP(S) requests. cannot be accessed through JS using 'document.cookie'
+            'samesite' => 'Strict'  // block cross-site cookie sending   ['only send this cookie with requests that originate from the same site that set the cookie']
+        ]);
         session_start();
+
+        // regenerate new session id to ensure new session is actually new
+        session_regenerate_id(true);
         
         // setting default pomodoro timer values
         // only set the default pomodoro values when session loaded for the first time

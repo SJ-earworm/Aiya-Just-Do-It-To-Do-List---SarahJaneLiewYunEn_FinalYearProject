@@ -128,7 +128,7 @@ document.addEventListener('click', function(event) {
     }
 
     // debug
-    console.log('focus session page entered.');
+    // console.log('focus session page entered.');
     toggleGeneralAppMode();
 })
 
